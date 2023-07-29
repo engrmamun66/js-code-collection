@@ -8,7 +8,7 @@ const log = console.log
  */
 let cloneDeep = (data) => {
     const inputType = checkType(data)
-    if(!['object', 'array'].includes(inputType)) return    
+    if(!['object', 'array'].includes(inputType)) return data
     let new_data = (inputType=='object') ? {} : []  
 
     const cloneByMe = (insertInto, data) => { 

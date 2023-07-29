@@ -35,8 +35,13 @@ function formatBytes(bytes){
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+function randomBetween(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 module.exports = {
     log,
     checkType,
     formatBytes,
+    randomBetween,
 }

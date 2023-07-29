@@ -93,31 +93,5 @@ log(two)
 
 
 
-let data = {
-  'fn': () => null,
-  'fn2': function(a, b){return a + b},
-  'obj': {name: 'Mamun', age: 56,  person: function(){
-          return `${this.name} ${this.age}`
-      }
-  },
-  'arr': [2, 3, 4],
-  'string': '',
-  'null': null,
-  'undefined': undefined,
-  'symbol': Symbol,
-  'regex': /\d+/,
-}
-
-let data2 = cloneDeep(data)
-data2.obj.name = 'new__name'
-data2.null = 'inset value'
-data2.undefined = 'defined'
-log('\n\n==============Example-3{}===================')
-log('\n----------Old')
-log(data)
-log('\n----------New')
-log(data2)
-
-
   
 

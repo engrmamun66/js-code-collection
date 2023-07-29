@@ -46,44 +46,27 @@ let cloneDeep = (data) => {
     if(!['object', 'array'].includes(inputType)) return    
     let new_data = (inputType=='object') ? {} : []  
 
-    const cloneByMe = (insertInto, data, dd=false) => { 
-      const typeof_data = checkType(insertInto)
-      
+    const cloneByMe = (insertInto, data) => { 
+      const typeof_data = checkType(data)
+      let iterable = typeof_data === 'object' ? Object.keys(data) : data       
         
-      if(typeof_data=='object'){        
-        Object.keys(data).forEach(key => {
-            let value = data[key]
-            let value_type = checkType(value)
-            if(value_type == 'object'){
-                insertInto[key] = {}
-                cloneByMe(insertInto[key], value, true)
-            }
-            else if(value_type=='array'){
-                insertInto[key] = []
-                cloneByMe(insertInto[key], value)
-            }
-            else{
-                insertInto[key] = value
-            }
-        })
-    }
-    else if(typeof_data=='array'){  
-        data.forEach((value, key) => {
-          
-          let value_type = checkType(value)
-          if(value_type == 'object'){
-              insertInto[key] = {}
-              cloneByMe(insertInto[key], value)
-          }
-          else if(value_type=='array'){
-              insertInto[key] = []
-              cloneByMe(insertInto[key], value)
-          }
-          else{
-              insertInto[key] = value
-          }
-        }) 
-      }       
+      iterable.forEach((a, b) => {
+        let key = typeof_data==='object' ? a : b
+        let value = typeof_data==='object' ? data[key] : a     
+        let value_type = checkType(value)
+
+        if(value_type == 'object'){
+            insertInto[key] = {}
+            cloneByMe(insertInto[key], value, true)
+        }
+        else if(value_type=='array'){
+            insertInto[key] = []
+            cloneByMe(insertInto[key], value)
+        }
+        else{
+            insertInto[key] = value
+        }
+      })       
     }
     cloneByMe(new_data, data)
     return new_data
@@ -91,6 +74,7 @@ let cloneDeep = (data) => {
 
 
 let persons = [
+  (a, b) => a + b,
   {name: 'Mamun',
   age: 44,
   },
@@ -102,9 +86,9 @@ let persons = [
   },
 ]
 let new_persons = cloneDeep(persons)
-new_persons[0] = {name: 'New_name', age: 999}
+new_persons[1] = {name: 'New_name', age: 999}
 new_persons[2].name = '---name'
-log('\n\n==============Example-1[]===================')
+log('==============Example-1[]===================')
 log('\n----------Old')
 log(persons)
 log('\n----------New')
@@ -126,12 +110,14 @@ let one = {
         {name: 'Mamun',
         age: 44,
         },
+        () => 'yah'
     ]
 }
 let two = cloneDeep(one)
 two.name = 'new_value'
 two.persons[0].name = 'new_value'
 two.persons[0].age = 999
+two.persons[2].age = 33333
 
 log('\n\n==============Example-2{}===================')
 log('\n----------Old')

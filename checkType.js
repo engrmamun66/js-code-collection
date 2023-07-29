@@ -19,3 +19,5 @@ function checkType(value) {
       return type; // undefined, function, boolean
     }
 }
+
+module.exports = checkType

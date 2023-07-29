@@ -1,6 +1,6 @@
-let checkType = require('./checkType')
+let { log, checkType } = require('./functions')
 
-const log = console.log
+
 
 /**
  * @param data array|object

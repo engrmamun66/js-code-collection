@@ -6,7 +6,7 @@ let { log, checkType } = require('./functions')
  * @param data array|object
  * @return cloned object recursively
  */
-let cloneDeep = (data) => {
+function cloneDeep(data){
     const inputType = checkType(data)
     if(!['object', 'array'].includes(inputType)) return data
     let new_data = (inputType=='object') ? {} : []  

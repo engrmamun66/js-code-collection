@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Change Select Element Value</title>
+</head>
+<body style="padding: 50px">
+
+<select id="mySelect" style="padding: 15px">
+    <option value="option1">Option 1</option>
+    <option value="option2">Option 2</option>
+    <option value="option3">Option 3</option>
+</select>
+
+<button onclick="remote" id="changeValue" style="padding: 15px">Change Value</button>
+
+<script>
+const mySelect = document.getElementById('mySelect')
+
+function whenChanged(e=null){
+    console.log('Select is changed', mySelect.value);
+}
+function whenClick(e=null){
+    console.log('Select clicked', mySelect.value);
+}
+function whenMouseEnter(e=null){
+    console.log('Select whenMouseEntered', mySelect.value);
+}
+mySelect.addEventListener('change', whenChanged)
+mySelect.addEventListener('click', whenClick)
+mySelect.addEventListener('mouseenter', whenMouseEnter)
+
+function remote(e){
+    // mySelect.value = 'option2'
+    if (document.createEvent) {
+        var event = document.createEvent("HTMLEvents");
+        event.initEvent('mouseenter', true, true);
+        mySelect.dispatchEvent(event)
+        event.initEvent('click', true, true);
+        mySelect.dispatchEvent(event)
+        event.initEvent('change', true, true);
+        mySelect.dispatchEvent(event)
+    } 
+    // else {
+    //     var event = document.createEventObject();
+    //     lang_pair.fireEvent('on' + lang_dest, event)
+    // }
+}
+let button = document.querySelector('button')
+button.addEventListener('click', remote)
+
+
+</script>
+
+</body>
+</html>

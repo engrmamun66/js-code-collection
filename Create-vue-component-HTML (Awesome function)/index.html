@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<head>
+    <script src="script.js"></script>
+</head>
+<html>
+
+    <head>
+        <title>addEventListener Options Example</title>
+    </head>
+
+    <body>
+        
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi magni accusamus natus voluptatibus rem blanditiis officia temporibus laborum numquam impedit necessitatibus facilis, obcaecati asperiores similique odio voluptatem, ipsum itaque laboriosam.
+            </p>
+
+
+        <ul>
+            <li>One <i class="la las"></i></li>
+            <li>Two</li>
+            <li>Three</li>
+            <li>One</li>
+            <li>Two</li>
+            <li>Three</li>
+            <li>One</li>
+            <li>Two</li>
+            <li>Three</li>
+            <li>One</li>
+            <li>Two</li>
+            <li>Three</li>
+        </ul>
+
+        <div id="main">
+            <template>
+
+                <h1></h1>
+            </template>
+
+        </div>
+   
+
+        <script>      
+        
+            let el = document.querySelector('#main template h1');
+            console.log(el);            
+            
+            let ul = document.querySelector('ul')
+
+            createComponentHTML(ul, [
+                {
+                    selector: 'li',
+                    template: true,
+                    attr: {
+                        "v-for": "(person, index) in persons", ":key": "index", "v-on:click" : "current=index;testClick($event)", ":class": "{VariantActive: index == current}"
+                    },
+                    text: "{{ person.title }}",
+                    removeSiblings: true,
+                    classToRemove: "VariantActive",
+                },
+              
+            ])
+
+        </script>
+    </body>
+
+</html>

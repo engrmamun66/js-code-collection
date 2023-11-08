@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- <script src="customElement.js"></script> -->
+    <script src="lifeCycleMethods.js"></script>
+    <script src="slotExample.js"></script>
+    <style>
+        /* h1{
+            color: red;
+        } */
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Learing Custom Element</h1>
+        <hr>
+
+        <life-cycle-methods 
+        steps="1"
+        initialvalue="10"
+        increment="myFunction()"
+        >
+        </life-cycle-methods>
+        <hr>
+
+
+        <!-- slot-example -->
+        <!-- <slot-example> </slot-example> -->
+    </div>
+<template>
+    <p>This is template text</p>
+</template>
+<script>
+    let t = document.querySelector('life-cycle-methods')
+    t.addEventListener('increment', (event)=>{
+        console.log(event);
+    })
+    function myFunction(event){
+        console.log(event);
+    }
+    new Function(myFunction)();
+</script>
+
+    
+      
+</body>
+</html>

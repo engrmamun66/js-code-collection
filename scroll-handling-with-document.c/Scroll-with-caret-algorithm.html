@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<head>
+    <script src="scroll.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<html>
+    <body class="container">
+        <div id="app">
+            <img class="border my-4" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D" alt="">
+            <img class="border my-4" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D" alt="">
+            
+            <section id="s1">
+                <div class="border" >
+                    <div class="row">
+                        <template v-for="x in one" :key="x">
+                            <div class="col-4 product" style="width: 260px;">    
+                                <div class="card" :id="'card_'+ x">
+                                    <img  :class="['PRODUCT']" src="https://plus.unsplash.com/premium_photo-1675896084254-dcb626387e1e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D" alt="">
+                                    <h3 class="title">Product name</h3>
+                                </div>
+                            </div> 
+                        </template>
+                    </div>
+                </div>
+            </section>
+
+            <img class="border my-4" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D" alt="">
+            <img class="border my-4" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D" alt="">
+
+            <section id="s2" class="p-3">
+                <div class="border" >
+                    <div class="row">
+                        <template v-for="x in one" :key="x">
+                            <div class="col-4 product" style="width: 260px;">    
+                                <div class="card">
+                                    <img  src="https://plus.unsplash.com/premium_photo-1675896084254-dcb626387e1e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D" alt="">
+                                    <h3 class="title">Product name</h3>
+                                </div>
+                            </div> 
+                        </template>
+                    </div>
+                </div>
+            </section>
+
+            <img class="border my-4" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2R1Y3R8ZW58MHx8MHx8fDA%3D" alt="">
+            <img class="border my-4" src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHByb2R1Y3R8ZW58MHx8MHx8fDA%3D" alt="">
+
+        </div>
+
+
+
+        <script>
+
+            const { createApp, ref } = Vue
+
+            createApp({
+            setup() {
+                const message = ref('Hello vue!')
+                function generateSteps(steps=10, startPoint={}, endPoint={}, ) {
+                    startPoint = {x: 0, y: window.scrollY}
+                    endPoint = {x: window.innerWidth, y: window.scrollY + window.innerWidth}
+                    /**
+                     * const startPoint = { x: 0, y: 433 };
+                     * const endPoint = { x: 1414, y: 463 };
+                    */
+                    const deltaX = (endPoint.x - startPoint.x) / (steps - 1);
+                    const deltaY = (endPoint.y - startPoint.y) / (steps - 1);
+
+                    const result = [];
+                    for (let i = 0; i < steps; i++) {
+                        const step = {
+                        x: Math.floor(startPoint.x + i * deltaX),
+                        y: Math.floor(startPoint.y + i * deltaY)
+                        };
+                        result.push(step);
+                    }
+
+                    return result;
+                }
+                return {
+                    one: 14,
+                    two: 10,
+                    generateSteps,
+
+                }
+            },
+            mounted() {
+                let vim = this
+                let lastProduct = document.querySelector('#card_14')
+                setTimeout(()=>{
+                    function scrollHandler(e){
+                        { 
+                        const ranges = vim.generateSteps(33)
+                            .map(({x, y}) => document.caretRangeFromPoint(x, y))
+                            .filter(el => el)
+                        const reachedAtLastProduct = ranges.some(range => {
+                            let { startContainer } = range;
+                            if(startContainer?.querySelector){
+                                let elements = Array.from(startContainer.querySelectorAll('.card') || []);
+                                console.clear()
+                                console.log(ranges)
+                                let product_with = 320;
+                                let products_in_row =  Math.ceil(window.innerWidth / product_with);            
+                                let element = startContainer.querySelector('#card_14')
+                                if(element == lastProduct && ranges?.length === 1){
+                                    return true
+                                }
+                                return false;
+                            }
+                            return false
+                        });                       
+                        // console.clear();
+                        console.log(reachedAtLastProduct);
+                    }
+                    }
+                    window.addEventListener("scroll", scrollHandler)
+             
+
+                }, 10)
+            }
+            }).mount('#app')
+
+
+            
+            
+        </script>
+    </body>
+
+</html>

@@ -205,6 +205,11 @@ function dropToCart(add_to_cart_event, {
     }); 
 }
 
+
+
+
+ 
+
 document.addEventListener('DOMContentLoaded', (e)=>{
     let cartEl = document.querySelector('#cart')
     cartEl.addEventListener('click',(e)=>{
@@ -213,9 +218,7 @@ document.addEventListener('DOMContentLoaded', (e)=>{
 
     document.addEventListener('click', function(e){
         if(e.target.matches('.addToCart')){      
-            let qty = e.target.parentNode.querySelector('input').value | 1
-         
-            console.log(qty);
+            let qty = e.target.parentNode.querySelector('input').value | 1  
 
             dropToCart(e, {
                 target_selector: 'img',
@@ -229,7 +232,9 @@ document.addEventListener('DOMContentLoaded', (e)=>{
                 console.log({success});
             })
         }
-        if(e.target.matches('.addToCart2')){          
+        if(e.target.matches('.addToCart2')){    
+            
+            let qty = e.target.parentNode.querySelector('input').value | 1
       
             dropToCart(e, {
                 // target_selector: '.product',
@@ -237,7 +242,7 @@ document.addEventListener('DOMContentLoaded', (e)=>{
                 cart_selector: '#cartFooter',
                 target_adjust_left: 8,
                 target_adjust_top: 5,
-                quantity: 5,
+                quantity: qty,
                 clone_gap: -20,                
             } ).then(({success}) => {
                 console.log({success});

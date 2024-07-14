@@ -1,6 +1,6 @@
 
 function dropToCart(add_to_cart_event, {
-    product_area_selector='.product',
+    product_selector='.product',
     target_selector='img',
     cart_selector='#cart',
     animation_in_second=1.5,
@@ -20,7 +20,7 @@ function dropToCart(add_to_cart_event, {
     let cart = document.querySelector(cart_selector);
     if(cart){
         let cartBound = cart.getBoundingClientRect();
-        let product = addToCartBtn.closest(product_area_selector);
+        let product = addToCartBtn.closest(product_selector);
         let target = product.matches(target_selector) ? product : product.querySelector(target_selector);
         if(target){
             let bound = target.getBoundingClientRect();

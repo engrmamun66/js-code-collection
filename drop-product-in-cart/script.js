@@ -3,7 +3,7 @@ function dropToCart(add_to_cart_event, {
     product_selector='.product',
     target_selector='img',
     cart_selector='#cart',
-    animation_in_second=1.5,
+    animation_time=1.5, // in secode
     target_opacity=0.5,
     target_width=20, // in pixel
     target_height=20, // in pixel
@@ -34,7 +34,7 @@ function dropToCart(add_to_cart_event, {
             clonedTarget.style.textWrape = 'nowrap';
             clonedTarget.style.overflow = 'hidden';
             clonedTarget.style.zIndex = '100000000000';
-            clonedTarget.style.transition = `all ${animation_in_second}s`;
+            clonedTarget.style.transition = `all ${animation_time}s`;
 
             document.body.appendChild(clonedTarget);
 
@@ -71,7 +71,7 @@ function dropToCart(add_to_cart_event, {
                 setTimeout(()=>{
                     clonedTarget.remove();
                     is_success = true;
-                }, (animation_in_second * 1000));               
+                }, (animation_time * 1000));               
 
             }, 0);
         }
@@ -80,7 +80,7 @@ function dropToCart(add_to_cart_event, {
     return new Promise((resolve, reject) => {
         setTimeout(() => {    
             resolve({success: is_success});           
-        }, (animation_in_second * 1000) + 10);
+        }, (animation_time * 1000) + 10);
     }); 
 }
 
@@ -88,9 +88,19 @@ document.addEventListener('DOMContentLoaded', (e)=>{
     document.addEventListener('click', function(e){
         if(e.target.matches('.addToCart')){           
             dropToCart(e, {
+                target_selector: 'img',
+                target_adjust_left: 8,
+                target_adjust_top: 5,
+            } ).then(({success}) => {
+                console.log({success});
+            })
+        }
+        if(e.target.matches('.addToCart2')){          
+      
+            dropToCart(e, {
                 // target_selector: '.product',
                 target_selector: 'img',
-                // cart_selector: '#cartFooter',
+                cart_selector: '#cartFooter',
                 target_adjust_left: 8,
                 target_adjust_top: 5,
             } ).then(({success}) => {

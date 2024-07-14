@@ -84,11 +84,7 @@ function dropToCart(add_to_cart_event, {
 
 document.addEventListener('DOMContentLoaded', (e)=>{
     document.addEventListener('click', function(e){
-        let { target } = e;
-        e.preventDefault()
-
-        if(target.matches('.addToCart')){
-           
+        if(e.target.matches('.addToCart')){           
             dropToCart(e, {
                 target_selector: '.product',
                 cart_selector: '#cartFooter',

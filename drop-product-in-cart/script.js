@@ -14,10 +14,13 @@ function dropToCart(add_to_cart_event, {
     quantity=1,
     clone_gap=-20, // For Multiple Qty
     step_time=500, // For Multiple Qty
+    cart_animation_class='random', // horizontal-shake | vertical-shake | rise-shake | random
+    cart_animation_time=0.7, // in second
+    after_add_click_on_cart=false,
 }={}){
 
     let response = {
-        is_success: false,
+        success: false,
         cartElement: null,
         error: '',
     };
@@ -25,33 +28,55 @@ function dropToCart(add_to_cart_event, {
     add_to_cart_event.preventDefault();
     
     let addToCartBtn = add_to_cart_event.target;
-    let cart = response.cart = document.querySelector(cart_selector);
+    let cart = document.querySelector(cart_selector);
     if(add_to_cart_event instanceof Event){
         if(cart){
+            response.cartElement = cart;
     
             /* ----------------------------------------------- */
             /*              With cart Animation                */
             /* ----------------------------------------------- */
             if(!document.querySelector('#cart_animation')){
-                let cssContents = `
-                    *.shakeCart{
-                        animation: shakeCart 0.4s ease-in-out forwards;
-                    }
-        
-                    @keyframes shakeCart {
-                        25% {
-                            transform: translateX(6px);
-                        }
-                        50% {
-                            transform: translateX(-4px);
-                        }
-                        75% {
-                            transform: translateX(2px);
-                        }
-                        100% {
-                            transform: translateX(0);
-                        }
-                    }
+                let cssContents = ` 
+
+                .vertical-shake {
+                    animation: vertical-shaking ${cart_animation_time}s ease-in-out forwards;
+                }
+
+                .horizontal-shake {
+                    animation: horizontal-shaking ${cart_animation_time}s ease-in-out forwards;
+                }
+
+                .rise-shake {
+                    animation: rise-shaking ${cart_animation_time}s ease-in-out forwards;
+                }
+
+                @keyframes vertical-shaking {
+                    0% { transform: translateY(0) }
+                    25% { transform: translateY(5px) }
+                    50% { transform: translateY(-5px) }
+                    75% { transform: translateY(5px) }
+                    100% { transform: translateY(0) }
+                }
+
+                @keyframes horizontal-shaking {
+                    0% { transform: translateX(0) }
+                    25% { transform: translateX(5px) }
+                    50% { transform: translateX(-5px) }
+                    75% { transform: translateX(5px) }
+                    100% { transform: translateX(0) }
+                }
+
+                @keyframes rise-shaking {
+                    0% { transform: translateX(0) rotate(0)}
+                    15% { transform: translateY(-2px) rotate(-17deg) }
+                    30% { transform: translateY(-3px) rotate(17deg) }
+                    45% { transform: translateY(-2px) rotate(-17deg) }
+                    60% { transform: translateY(-3px) rotate(17deg) }
+                    90% { transform: translateY(-2px) rotate(-17deg) } 
+                    100% { transform: translateY(0) rotate(0) }
+                }             
+
                 `
                 let style_el = document.createElement('style')
                 style_el.id = 'cart_animation';
@@ -71,7 +96,7 @@ function dropToCart(add_to_cart_event, {
                 let target = (product.matches(target_selector) || target_selector==='__SELF__') ? product : product.querySelector(target_selector);
                 if(target){
                     let bound = target.getBoundingClientRect();
-                    Array.from({length: quantity}).fill(1).forEach((v, i)=>{
+                    Array.from({length: +quantity}).fill(1).forEach((v, i)=>{
                         const adjust_position = i * clone_gap;
                         const adjust_time = +((i * step_time) / 1000).toFixed(2);
         
@@ -101,7 +126,6 @@ function dropToCart(add_to_cart_event, {
                             
                             let top_distance = bound.top - cartBound.top
                             if(top_distance > window.innerHeight){         
-                                // clonedTarget.style.top = `-100px`;
                                 clonedTarget.style.top = `-100px`;
                             }else{
                                 let cart_in_footer = cartBound.top > bound.top;
@@ -123,7 +147,7 @@ function dropToCart(add_to_cart_event, {
         
                             setTimeout(()=>{
                                 clonedTarget.remove();
-                                response.is_success = true;                        
+                                response.success = true;                        
                             }, ((animation_time + adjust_time) * 1000));               
         
                         }, 0);
@@ -143,26 +167,64 @@ function dropToCart(add_to_cart_event, {
     }
     let extra_time_when_qty_is_1_more = (quantity - 1) * step_time;
 
+    function showCartAnimation(){
+        if(!cart_animation_class) return;
+        const animationClasses = [
+            'rise-shake',
+            'vertical-shake',
+            'horizontal-shake',
+        ]
+
+        const randBetween = function (min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min)
+        }
+        
+
+        if(cart_animation_class == 'random'){
+            cart_animation_class = animationClasses[randBetween(0, animationClasses.length - 1)];
+        } else if(animationClasses.includes(cart_animation_class)){
+            cart_animation_class = cart_animation_class;
+        } else {
+            return;
+        }
+
+        cart.classList.add(cart_animation_class);
+        setTimeout(() => {
+            cart.classList.remove(cart_animation_class);
+        }, (cart_animation_time * 1000));        
+    }
+
     return new Promise((resolve, reject) => {
         setTimeout(() => {    
-            resolve({success: is_success});   
-            cart.classList.add('shakeCart');
-            setTimeout(() => {
-                cart.classList.remove('shakeCart');
-            }, 400);        
+            resolve(response);  
+            showCartAnimation();
+            if(after_add_click_on_cart && response.cartElement){
+                response.cartElement.click();
+            }
         }, (animation_time * 1000) + 10 + extra_time_when_qty_is_1_more);
     }); 
 }
 
 document.addEventListener('DOMContentLoaded', (e)=>{
+    let cartEl = document.querySelector('#cart')
+    cartEl.addEventListener('click',(e)=>{
+        console.log('Cart is opening')
+    })
+
     document.addEventListener('click', function(e){
-        if(e.target.matches('.addToCart')){           
+        if(e.target.matches('.addToCart')){      
+            let qty = e.target.parentNode.querySelector('input').value | 1
+         
+            console.log(qty);
+
             dropToCart(e, {
                 target_selector: 'img',
                 target_adjust_left: 8,
                 target_adjust_top: 5,
-                quantity: 3,
+                quantity: qty,
                 clone_gap: -20,
+                step_time: 200, 
+                after_add_click_on_cart: true,
             } ).then(({success}) => {
                 console.log({success});
             })
@@ -176,7 +238,7 @@ document.addEventListener('DOMContentLoaded', (e)=>{
                 target_adjust_left: 8,
                 target_adjust_top: 5,
                 quantity: 5,
-                clone_gap: -20,
+                clone_gap: -20,                
             } ).then(({success}) => {
                 console.log({success});
             })

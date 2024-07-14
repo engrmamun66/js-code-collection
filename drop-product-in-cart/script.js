@@ -96,7 +96,7 @@ function dropToCart(add_to_cart_event, {
                 let target = (product.matches(target_selector) || target_selector==='__SELF__') ? product : product.querySelector(target_selector);
                 if(target){
                     let bound = target.getBoundingClientRect();
-                    Array.from({length: +quantity}).fill(1).forEach((v, i)=>{
+                    Array.from({length: Number(quantity)}).fill(1).forEach((v, i)=>{
                         const adjust_position = i * clone_gap;
                         const adjust_time = +((i * step_time) / 1000).toFixed(2);
         
@@ -232,9 +232,10 @@ document.addEventListener('DOMContentLoaded', (e)=>{
                 console.log({success});
             })
         }
-        if(e.target.matches('.addToCart2')){    
+        else if(e.target.matches('.addToCart2')){    
             
             let qty = e.target.parentNode.querySelector('input').value | 1
+            console.log({qty});
       
             dropToCart(e, {
                 // target_selector: '.product',

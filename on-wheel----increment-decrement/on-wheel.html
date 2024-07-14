@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+</head>
+
+<body class="m-5">
+    <div id="app" class="container"> 
+        {{message}} 
+        <input style="width:300px" v-model="quantity" type="number" class="form-control" 
+        @wheel.prevent="
+        (event) => {
+          let val = event.target.value;
+          quantity = val;           
+          if (event.deltaY > 0) {
+            event.target.value--;
+          } else if (event.deltaY < 0) {
+            event.target.value++;
+          }
+          if (event.target.value < 1) {
+            event.target.value = 1;
+          }
+        }
+      ">
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref } = Vue
+        createApp({
+            setup() {
+                let quantity = ref(1)
+                const message = ref('Hello vue!')
+                return {
+                    message,
+                    quantity
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>

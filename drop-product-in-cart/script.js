@@ -34,6 +34,7 @@ function dropToCart(add_to_cart_event, {
             clonedTarget.style.textWrape = 'nowrap';
             clonedTarget.style.overflow = 'hidden';
             clonedTarget.style.zIndex = '100000000000';
+            clonedTarget.style.pointerEvents = 'none';
             clonedTarget.style.transition = `all ${animation_time}s`;
 
             document.body.appendChild(clonedTarget);

@@ -14,60 +14,62 @@ function dropToCart(add_to_cart_event, {
 
     let is_success = false;
 
+    add_to_cart_event.preventDefault();
+
     let addToCartBtn = add_to_cart_event.target;
     let cart = document.querySelector(cart_selector);
     if(cart){
         let cartBound = cart.getBoundingClientRect();
         let product = addToCartBtn.closest(product_area_selector);
-        let img = product.matches(target_selector) ? product : product.querySelector(target_selector);
-        if(img){
-            let bound = img.getBoundingClientRect();
-            let clonedImg = img.cloneNode(true);     
-            if(target_style) clonedImg.setAttribute('style', target_style);
-            clonedImg.style.width = bound.width + 'px';
-            clonedImg.style.height = bound.height + 'px';
-            clonedImg.style.position = 'fixed';
-            clonedImg.style.left = bound.left + 'px';
-            clonedImg.style.top = bound.top + 'px';
-            clonedImg.style.textWrape = 'nowrap';
-            clonedImg.style.overflow = 'hidden';
-            clonedImg.style.zIndex = '100000000000';
-            clonedImg.style.transition = `all ${animation_in_second}s`;
+        let target = product.matches(target_selector) ? product : product.querySelector(target_selector);
+        if(target){
+            let bound = target.getBoundingClientRect();
+            let clonedTarget = target.cloneNode(true);     
+            if(target_style) clonedTarget.setAttribute('style', target_style);
+            clonedTarget.style.width = bound.width + 'px';
+            clonedTarget.style.height = bound.height + 'px';
+            clonedTarget.style.position = 'fixed';
+            clonedTarget.style.left = bound.left + 'px';
+            clonedTarget.style.top = bound.top + 'px';
+            clonedTarget.style.textWrape = 'nowrap';
+            clonedTarget.style.overflow = 'hidden';
+            clonedTarget.style.zIndex = '100000000000';
+            clonedTarget.style.transition = `all ${animation_in_second}s`;
 
-            document.body.appendChild(clonedImg);
+            document.body.appendChild(clonedTarget);
 
             // Animation startaddToCartBtn
             setTimeout(()=>{
                 
-                clonedImg.style.left = (cartBound.left + target_adjust_left) + 'px';
+                clonedTarget.style.left = (cartBound.left + target_adjust_left) + 'px';
 
               
                 const y = add_to_cart_event.y;        
                 
                 let top_distance = bound.top - cartBound.top
                 if(top_distance > window.innerHeight){         
-                    // clonedImg.style.top = `-100px`;
-                    clonedImg.style.top = `-100px`;
+                    // clonedTarget.style.top = `-100px`;
+                    clonedTarget.style.top = `-100px`;
                 }else{
                     let cart_in_footer = cartBound.top > bound.top;
                     if(cart_in_footer){
                         if(cartBound.top > (window.innerHeight + 200)){
-                            clonedImg.style.top = `${window.innerHeight + 100}px`;
+                            clonedTarget.style.top = `${window.innerHeight + 100}px`;
                         } else {
-                            clonedImg.style.top = (cartBound.top + target_adjust_top) + 'px';
+                            clonedTarget.style.top = (cartBound.top + target_adjust_top) + 'px';
                         }
                     } else {
-                        clonedImg.style.top = (cartBound.top + target_adjust_top) + 'px';
+                        clonedTarget.style.top = (cartBound.top + target_adjust_top) + 'px';
                     }
                 }
 
-                clonedImg.style.opacity = target_opacity;
-                clonedImg.style.width = (target_width || cartBound.width) + 'px';
-                clonedImg.style.height = (target_height || cartBound.height) + 'px';
+                clonedTarget.style.opacity = target_opacity;
+                clonedTarget.style.width = (target_width || cartBound.width) + 'px';
+                clonedTarget.style.height = (target_height || cartBound.height) + 'px';
 
 
                 setTimeout(()=>{
-                    clonedImg.remove();
+                    clonedTarget.remove();
                     is_success = true;
                 }, (animation_in_second * 1000));               
 
@@ -86,9 +88,10 @@ document.addEventListener('DOMContentLoaded', (e)=>{
     document.addEventListener('click', function(e){
         if(e.target.matches('.addToCart')){           
             dropToCart(e, {
-                target_selector: '.product',
-                cart_selector: '#cartFooter',
-                target_adjust_left: 5,
+                // target_selector: '.product',
+                target_selector: 'img',
+                // cart_selector: '#cartFooter',
+                target_adjust_left: 8,
                 target_adjust_top: 5,
             } ).then(({success}) => {
                 console.log({success});

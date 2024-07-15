@@ -32,13 +32,13 @@
           opacity: 0;
         } 
         .dropping-to-cart{
-          border-radius: 10px;
+          border-radius: 5px;
         }   
         .dropping-to-cart:nth-child(odd) {
-          border: 2px solid green;
+          border: 2px solid rgb(250, 71, 0);
         }
         .dropping-to-cart:nth-child(even) {
-          border: 2px solid rgb(128, 0, 70);
+          border: 2px solid rgb(29, 29, 29);
         }
         
     </style>
@@ -271,8 +271,9 @@
                   target_adjust_left: 8,
                   target_adjust_top: 9,
                   quantity: +quantity,
+                  animation_time: 1,
                   clone_gap: 20,
-                  step_time: 200, 
+                  step_time: 100, 
                   after_add_click_on_cart: false,
               } ).then(({success}) => {
                   console.log({success});

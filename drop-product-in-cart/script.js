@@ -210,44 +210,43 @@ function dropToCart(add_to_cart_event, {
 
  
 
-document.addEventListener('DOMContentLoaded', (e)=>{
-    let cartEl = document.querySelector('#cart')
-    cartEl.addEventListener('click',(e)=>{
-        console.log('Cart is opening')
-    })
+// document.addEventListener('DOMContentLoaded', (e)=>{
+//     let cartEl = document.querySelector('#cart')
+//     cartEl.addEventListener('click',(e)=>{
+//         console.log('Cart is opening')
+//     })
 
-    document.addEventListener('click', function(e){
-        if(e.target.matches('.addToCart')){      
-            let qty = e.target.parentNode.querySelector('input').value | 1  
+//     document.addEventListener('click', function(e){
+//         if(e.target.matches('.addToCart')){      
+//             let qty = e.target.parentNode.querySelector('input').value | 1  
 
-            dropToCart(e, {
-                target_selector: 'img',
-                target_adjust_left: 8,
-                target_adjust_top: 5,
-                quantity: qty,
-                clone_gap: -20,
-                step_time: 200, 
-                after_add_click_on_cart: true,
-            } ).then(({success}) => {
-                console.log({success});
-            })
-        }
-        else if(e.target.matches('.addToCart2')){    
+//             dropToCart(e, {
+//                 target_selector: 'img',
+//                 target_adjust_left: 8,
+//                 target_adjust_top: 9,
+//                 quantity: qty,
+//                 clone_gap: -20,
+//                 step_time: 200, 
+//                 after_add_click_on_cart: true,
+//             } ).then(({success}) => {
+//                 console.log({success});
+//             })
+//         }
+//         else if(e.target.matches('.addToCart2')){    
             
-            let qty = e.target.parentNode.querySelector('input').value | 1
-            console.log({qty});
+//             let qty = e.target.parentNode.querySelector('input').value | 1
+//             console.log({qty});
       
-            dropToCart(e, {
-                // target_selector: '.product',
-                target_selector: 'img',
-                cart_selector: '#cartFooter',
-                target_adjust_left: 8,
-                target_adjust_top: 5,
-                quantity: qty,
-                clone_gap: -20,                
-            } ).then(({success}) => {
-                console.log({success});
-            })
-        }
-    })
-})
+//             dropToCart(e, {
+//                 target_selector: 'img',
+//                 cart_selector: '#cartFooter',
+//                 target_adjust_left: 8,
+//                 target_adjust_top: 9,
+//                 quantity: qty,
+//                 clone_gap: -20,                
+//             } ).then(({success}) => {
+//                 console.log({success});
+//             })
+//         }
+//     })
+// })

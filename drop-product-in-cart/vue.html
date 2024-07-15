@@ -13,7 +13,33 @@
             z-index: 990999999009;
             top: 20px;
             box-shadow: 0px 3px 12px #00000062;
-        }        
+        } 
+        #cart, #cartFooter{
+          position: relative;
+        } 
+        .cartTotal{
+          position: absolute;
+          right: 7px;
+          top: -5px;
+          width: 20px;
+          height: 20px;
+          font-size: 14px;
+          z-index: 9999;
+          text-align: center;
+          border-radius: 50%;
+        }  
+        [v-cloak]{
+          opacity: 0;
+        } 
+        .dropping-to-cart{
+          border-radius: 10px;
+        }   
+        .dropping-to-cart:nth-child(odd) {
+          border: 2px solid green;
+        }
+        .dropping-to-cart:nth-child(even) {
+          border: 2px solid rgb(128, 0, 70);
+        }
         
     </style>
         
@@ -49,6 +75,7 @@
                 <li class="nav-item">
                   <a id="cart" class="nav-link" href="#" tabindex="-1" aria-disabled="true">
                       <i class='bx bx-cart' style="font-size:20px" ></i>
+                      <span class="cartTotal" :class="{'nine-more': cartToal > 9}" v-cloak > {{cartTotal}} </span>
                   </a>
                 </li>
               </ul>
@@ -69,15 +96,15 @@
 
             <div class="row">
                 
-                <div v-for="x in 18" class="col-md-4 mb-3">
+                <div v-for="product in products" class="col-md-4 mb-3">
                     <div class="product card" style="width: 18rem;">
-                        <img src="https://fastly.picsum.photos/id/772/200/170.jpg?hmac=kjvRh8iCTAWpCcsbDISH17Ohw-j8JgepnKZRMNAK7kA" class="card-img-top" alt="...">
+                        <img :src="product.url" class="card-img-top" alt="...">
                         <div class="card-body">
-                          <h5 class="card-title">Card title</h5>
-                          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                          <input type="number" value="1" class="form-control mb-3 w-50" placeholder="Quantity" />
-                          <a href="#" class="btn btn-primary addToCart">Add To Cart</a>
-                          <a href="#" class="btn btn-warning addToCart2">Add To Cart</a>
+                          <h5 class="card-title"> {{product.title}} </h5>
+                          <p class="card-text">Some quick example text to build on the card title and make up the bulk </p>
+                          <input v-model="product.quantity" @wheel.prevent="onWheel($event, product)" type="number" value="1" class="form-control mb-3 w-50" placeholder="Quantity" />
+                          <a @click="onDropToCart($event, 'header', product)" href="#" class="btn btn-primary addToCart">Add To Cart</a>
+                          <a @click="onDropToCart($event, 'footer', product)" href="#" class="btn btn-warning addToCart2">Add To Cart</a>
                         </div>
                       </div>
                 </div>                
@@ -115,6 +142,7 @@
                   <li class="nav-item">
                     <a id="cartFooter" class="nav-link" href="#" tabindex="-1" aria-disabled="true">
                         <i class='bx bx-cart' style="font-size:20px" ></i>
+                        <span class="cartTotal" :class="{'nine-more': cartToal > 9}" v-cloak > {{cartTotal}} </span>
                     </a>
                   </li>
                 </ul>
@@ -139,9 +167,138 @@
 
         createApp({
           setup() {
-            const message = ref('Hello vue!')
+            let cartTotal = ref(0)
+            
+            let products = ref([
+            {
+              "id": 1,
+              "title": "accusamus beatae ad facilis cum similique qui sunt",
+              "url": "https://images.unsplash.com/photo-1460134846237-51c777df6111?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FtZXJhfGVufDB8fDB8fHww",
+              "quantity": 1,
+            },
+            {
+              "id": 2,
+              "title": "reprehenderit est deserunt velit ipsam",
+              "url": "https://images.unsplash.com/photo-1511184059754-e4b5bbbcef75?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y2FtZXJhfGVufDB8fDB8fHww",
+              "quantity": 1,
+            },
+            {
+              "id": 3,
+              "title": "officia porro iure quia iusto qui ipsa ut modi",
+              "url": "https://images.unsplash.com/photo-1536632087471-3cf3f2986328?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Y2FtZXJhfGVufDB8fDB8fHww",
+              "quantity": 1,
+            },
+            {
+              "id": 4,
+              "title": "culpa odio esse rerum omnis laboriosam voluptate repudiandae",
+              "url": "https://plus.unsplash.com/premium_photo-1674389991678-0836ca77c7f7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Y2FtZXJhfGVufDB8fDB8fHww",
+              "quantity": 1,
+            },
+            {
+              "id": 5,
+              "title": "natus nisi omnis corporis facere molestiae rerum in",
+              "url": "https://images.unsplash.com/photo-1452780212940-6f5c0d14d848?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDd8fGNhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+              "quantity": 1,
+            },
+            {
+              "id": 6,
+              "title": "accusamus ea aliquid et amet sequi nemo",
+              "url": "https://images.unsplash.com/photo-1593644311729-d0b478c97d95?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+              "quantity": 1,
+            },
+            {
+              "id": 7,
+              "title": "officia delectus consequatur vero aut veniam explicabo molestias",
+              "url": "https://images.unsplash.com/photo-1622702247961-f3619c5d6211?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGNhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+              "quantity": 1,
+            },
+            {
+              "id": 8,
+              "title": "aut porro officiis laborum odit ea laudantium corporis",
+              "url": "https://images.unsplash.com/photo-1532620145515-9248dbeb2198?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTB8fGNhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+              "quantity": 1,
+            },
+            {
+              "id": 9,
+              "title": "qui eius qui autem sed",
+              "url": "https://images.unsplash.com/file-1715652217532-464736461acbimage?dpr=2&w=416&auto=format&fit=crop&q=60",
+              "quantity": 1,
+            },
+            {
+              "id": 10,
+              "title": "beatae et provident et ut vel",
+              "url": "https://plus.unsplash.com/premium_photo-1674389878430-243d6efda254?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjV8fGNhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+              "quantity": 1,
+            },
+            {
+              "id": 11,
+              "title": "nihil at amet non hic quia qui",
+              "url": "https://images.unsplash.com/photo-1495745966610-2a67f2297e5e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGNhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+              "quantity": 1,
+            },
+            {
+              "id": 12,
+              "title": "mollitia soluta ut rerum eos aliquam consequatur perspiciatis maiores",
+              "url": "https://images.unsplash.com/photo-1478145971721-10511ecaf005?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzF8fGNhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+              "quantity": 1,
+            },
+            {
+              "id": 13,
+              "title": "repudiandae iusto deleniti rerum",
+              "url": "https://images.unsplash.com/photo-1542653285-7f095a1183e0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fGNhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+              "quantity": 1,
+            },
+            {
+              "id": 14,
+              "title": "est necessitatibus architecto ut laborum",
+              "url": "https://images.unsplash.com/photo-1523607834662-b27a3f036f3f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDJ8fGNhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+              "quantity": 1,
+            },
+            {
+              "id": 15,
+              "title": "harum dicta similique quis dolore earum ex qui",
+              "url": "https://images.unsplash.com/photo-1501479276381-eee3729ebaf4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fGNhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+              "quantity": 1,
+            },
+            ])
+
+            
+            
+            function onDropToCart(e, _in, {quantity}){
+              dropToCart(e, {
+                cart_selector: _in=='header' ? '#cart' : '#cartFooter',
+                  target_selector: 'img',
+                  target_adjust_left: 8,
+                  target_adjust_top: 9,
+                  quantity: +quantity,
+                  clone_gap: 20,
+                  step_time: 200, 
+                  after_add_click_on_cart: true,
+              } ).then(({success}) => {
+                  console.log({success});
+                  cartTotal.value += +quantity;
+              })
+            }
+
+            function onWheel(event, product){   
+              let val = event.target.value;
+              product.quantity = val;           
+              if (event.deltaY > 0) {
+                event.target.value--;
+              } else if (event.deltaY < 0) {
+                event.target.value++;
+              }
+              if (event.target.value < 1) {
+                event.target.value = 1;
+              }
+            }
+  
+
             return {
-              message
+              products,
+              cartTotal,
+              onWheel,
+              onDropToCart // from script.js
             }
           }
         }).mount('#app')

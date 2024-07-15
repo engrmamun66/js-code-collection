@@ -13,7 +13,7 @@ function dropToCart(add_to_cart_event, {
     target_class='dropping-to-cart',
     quantity=1,
     clone_gap=-20, // For Multiple Qty
-    step_time=500, // For Multiple Qty
+    step_time=200, // For Multiple Qty
     cart_animation_class='random', // horizontal-shake | vertical-shake | rise-shake | random
     cart_animation_time=0.7, // in second
     after_add_click_on_cart=false,

@@ -49,6 +49,23 @@ let button = document.querySelector('button')
 button.addEventListener('click', remote)
 
 
+<!-- ----------------------------------------------------------------------- -->
+<!--                    User fireEvent function anywhere                     -->
+<!-- ----------------------------------------------------------------------- -->
+function fireEvent (element, ...eventNames) {
+    eventNames = eventNames.flat();
+    if (element && element instanceof HTMLElement && eventNames?.length) {
+      if (document.createEvent) {
+        var event = document.createEvent("HTMLEvents");
+        eventNames.forEach((eventName) => {
+          event.initEvent(eventName /** click | change ...etc */, true, true);
+          element.dispatchEvent(event);
+        });
+      }
+    }
+  }
+
+
 </script>
 
 </body>

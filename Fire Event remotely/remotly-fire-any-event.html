@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Change Select Element Value</title>
+  <title>Change Select Element Value</title>
 </head>
+
 <body style="padding: 50px">
 
-<select id="mySelect" style="padding: 15px">
+  <select id="mySelect" style="padding: 15px">
     <option value="option1">Option 1</option>
     <option value="option2">Option 2</option>
     <option value="option3">Option 3</option>
-</select>
+  </select>
 
-<button onclick="remote" id="changeValue" style="padding: 15px">Change Value</button>
+  <button onclick="remote" id="changeValue" style="padding: 15px">Change Value</button>
 
-<script>
-const mySelect = document.getElementById('mySelect')
+  <script>
+    const mySelect = document.getElementById('mySelect')
 
-function whenChanged(e=null){
-    console.log('Select is changed', mySelect.value);
-}
-function whenClick(e=null){
-    console.log('Select clicked', mySelect.value);
-}
-function whenMouseEnter(e=null){
-    console.log('Select whenMouseEntered', mySelect.value);
-}
-mySelect.addEventListener('change', whenChanged)
-mySelect.addEventListener('click', whenClick)
-mySelect.addEventListener('mouseenter', whenMouseEnter)
+    function whenChanged(e = null) {
+      console.log('Select is changed', mySelect.value);
+    }
+    function whenClick(e = null) {
+      console.log('Select clicked', mySelect.value);
+    }
+    function whenMouseEnter(e = null) {
+      console.log('Select whenMouseEntered', mySelect.value);
+    }
+    mySelect.addEventListener('change', whenChanged)
+    mySelect.addEventListener('click', whenClick)
+    mySelect.addEventListener('mouseenter', whenMouseEnter)
 
-function remote(e){
-    // mySelect.value = 'option2'
-    if (document.createEvent) {
+    function remote(e) {
+      // mySelect.value = 'option2'
+      if (document.createEvent) {
         var event = document.createEvent("HTMLEvents");
         event.initEvent('mouseenter', true, true);
         mySelect.dispatchEvent(event)
@@ -39,34 +41,45 @@ function remote(e){
         mySelect.dispatchEvent(event)
         event.initEvent('change', true, true);
         mySelect.dispatchEvent(event)
-    } 
-    // else {
-    //     var event = document.createEventObject();
-    //     lang_pair.fireEvent('on' + lang_dest, event)
-    // }
-}
-let button = document.querySelector('button')
-button.addEventListener('click', remote)
+      }
+      // else {
+      //     var event = document.createEventObject();
+      //     lang_pair.fireEvent('on' + lang_dest, event)
+      // }
+    }
+    let button = document.querySelector('button')
+    button.addEventListener('click', remote)
 
 
-<!-- ----------------------------------------------------------------------- -->
-<!--                    User fireEvent function anywhere                     -->
-<!-- ----------------------------------------------------------------------- -->
-function fireEvent (element, ...eventNames) {
-    eventNames = eventNames.flat();
-    if (element && element instanceof HTMLElement && eventNames?.length) {
-      if (document.createEvent) {
-        var event = document.createEvent("HTMLEvents");
-        eventNames.forEach((eventName) => {
-          event.initEvent(eventName /** click | change ...etc */, true, true);
-          element.dispatchEvent(event);
-        });
+
+    /**
+    * 
+    * @param {*} element 
+    * @param  'click', 'change', 'personal_event', ... 
+    */
+    function fireEvent(targetObject, ...eventNames) {
+
+      if (typeof targetObject !== 'object') return
+
+      let has_length = eventNames?.length
+      let is_htmlElement = targetObject instanceof HTMLElement
+      let is_window = targetObject?.constructor?.name === 'Window'
+      let is_document = targetObject?.constructor?.name === 'HTMLDocument'
+
+      eventNames = eventNames.flat();
+      if (has_length && (is_htmlElement || is_window || is_document)) {
+        if (document.createEvent) {
+          var event = document.createEvent("HTMLEvents");
+          eventNames.forEach((eventName) => {
+            event.initEvent(eventName /** click | change ...etc */, true, true);
+            targetObject.dispatchEvent(event);
+          });
+        }
       }
     }
-  }
 
-
-</script>
+  </script>
 
 </body>
+
 </html>
